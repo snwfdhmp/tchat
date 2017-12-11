@@ -35,6 +35,8 @@ func main() {
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		write(w, Messages)
+
+		Messages = []string{}
 	}).Methods("GET")
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
