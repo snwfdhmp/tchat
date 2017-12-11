@@ -25,9 +25,10 @@ func headers(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {	
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "*")
-		
+
 		handler(w, r)
 	}
+}
 
 func main() {
 	r := mux.NewRouter()
@@ -45,5 +46,5 @@ func main() {
 		Messages = append(Messages, msg)
 	}).Methods("POST")
 
-	http.ListenAndServe(":9876", r)
+	http.ListenAndServe(":9876", headers(r))
 }
