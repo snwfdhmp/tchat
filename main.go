@@ -21,6 +21,14 @@ func read(r *http.Request) (string, error) {
 	return s, json.NewDecoder(r.Body).Decode(&s)
 }
 
+func headers(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {	
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "*")
+		
+		handler(w, r)
+	}
+
 func main() {
 	r := mux.NewRouter()
 
