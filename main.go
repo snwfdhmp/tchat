@@ -2,13 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 )
 
 var (
-	Messages []string
+	Messages = make([]string, 0)
 )
 
 func write(w http.ResponseWriter, v interface{}) {
@@ -36,7 +38,7 @@ func main() {
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		write(w, Messages)
 
-		Messages = []string{}
+		Messages = make([]string, 0)
 	}).Methods("GET")
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +47,9 @@ func main() {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
+
 		Messages = append(Messages, msg)
+		log.Println("Received '", msg, "' at", time.Now())
 	}).Methods("POST")
 
 	http.ListenAndServe(":9876", headers(r))
